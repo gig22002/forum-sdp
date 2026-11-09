@@ -1,0 +1,20 @@
+""" Program to convert CSV to json """
+import sys
+import pandas as pd
+
+def CSVToJSON(path, out="./out.json"):
+    """ Convert CSV file to JSON preprocessing """
+    #create pandas dataframe from csv
+    df = pd.read_csv(path)
+
+    
+
+    return out
+
+if __name__ == "__main__":
+    if (len(sys.argv) >= 2):
+        path = sys.argv[1]
+    else:
+        sys.exit("Error: must provide csv path")
+
+    CSVToJSON(path)
