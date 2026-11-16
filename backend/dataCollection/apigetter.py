@@ -3,11 +3,7 @@ import requests
 import json
 import sys
 
-def Get(url):
-    #craft filename
-    segments = url.split("/")
-    out = segments[-1]
-
+def Get(url, out):
     #make request
     resp = requests.get(url)
     data = resp.json()
@@ -20,6 +16,7 @@ def Get(url):
     return data
 
 if __name__ == "__main__":
+    """ Requires txt file with [outputname],[url] as format """
     #get path
     if (len(sys.argv) >= 2):
         path = sys.argv[1]
@@ -29,4 +26,5 @@ if __name__ == "__main__":
     #enumerate paths
     with open(path, "r") as f:
         for l in f:
-            Get(l.strip())
+            split = l.strip().split(",")
+            Get(split[1], split[0])

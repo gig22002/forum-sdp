@@ -1,1 +1,1 @@
-https://data.ct.gov/resource/anen-a5ei.json
+ctfiscaldata.json,https://data.ct.gov/resource/anen-a5ei.json
