@@ -11,7 +11,7 @@ import pandas as pd
 #ingest more sources
 #translate from json to Sam's pug format
 
-def PopulateData(df):
+def PopulateData(munData, addtlData):
     raise NotImplementedError
 
 def CSVToJSON(path, out="./out.json"):
@@ -62,11 +62,19 @@ if __name__ == "__main__":
     path = args.input
     endpointsPath = args.file
 
+    #create base file
+    _json = CSVToJSON(path)
+
     #process data
     filenames = []
     with open(endpointsPath, "r") as f:
         for l in f:
             filenames.append(l.strip().split(",")[0])
-    print(filenames)
-
-    json = CSVToJSON(path)
+    #process data for each file
+    for x in filenames:
+        with open(x, "r") as f:
+            if (x.strip()[-4:].lower() == "json"): #if json
+                data = json.load(f)
+            else:
+                sys.exit("Error: require json file format from APIs")
+            PopulateData(json, data)
