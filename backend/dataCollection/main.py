@@ -2,6 +2,7 @@
 import sys
 import json
 import datetime
+import argparse
 import pandas as pd
 
 #TODO
@@ -39,10 +40,33 @@ def CSVToJSON(path, out="./out.json"):
     #return json object
     return outJson
 
-if __name__ == "__main__":
-    if (len(sys.argv) >= 2):
-        path = sys.argv[1]
-    else:
-        sys.exit("Error: must provide csv path")
+def CreateArgs():
+    """ Create argument parser """
+    #create object
+    parser = argparse.ArgumentParser()
 
-    CSVToJSON(path)
+    #input: csv output
+    parser.add_argument("input", help="Path to the json file to output to")
+
+    #api data and filenames
+    parser.add_argument("-f", "--file", action="store", help="Path to the text file of API endpoints to query")
+
+    return parser
+
+if __name__ == "__main__":
+    #parse args
+    parser = CreateArgs()
+    args = parser.parse_args()
+
+    #store args
+    path = args.input
+    endpointsPath = args.file
+
+    #process data
+    filenames = []
+    with open(endpointsPath, "r") as f:
+        for l in f:
+            filenames.append(l.strip().split(",")[0])
+    print(filenames)
+
+    json = CSVToJSON(path)
