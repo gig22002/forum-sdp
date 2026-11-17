@@ -79,7 +79,7 @@ settingsmenu-:hover svg,
 }
 
 .column-icon:hover {
-  transform: scale(1.2); /* Makes the column icon 20% larger */
+  transform: scale(1.2); 
 
   
 
