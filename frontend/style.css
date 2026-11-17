@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Bona+Nova:ital,wght@0,400;0,700;1,400&display=swap');
+
+@font-face {
+    font-family: 'Laandbrau';
+    src: url('/fonts/Laandbrau.ttf') format('truetype');
+    
+}
+
+
+:root {
+  --sidebottombars: #250303;         
+  --accent: #ca8e79;                
+  --menu-border: rgba(255, 255, 255, 0.1);
+  --window-border: rgba(255, 255, 255, 0.15);
+  --window-border-2: rgba(255, 255, 255, 0.05);
+  --notification-badge-color: #e11d48; 
+  --green: rgb(163, 255, 202); 
+  --desktop-item-background: #2f1414; 
+  --desktop-item-text: #ffffff;
+  --chat-received-bg: var(--desktop-item-background);
+  --desktop-item-border: var(--accent);
+  --apppopup: #1e293b;
+  --gold: var(--accent);
+  --site-bg: #2f0f0f;
+  --main: var(--site-bg);
+  --darkaccent: var(--sidebottombars);
+  --divider: var(--menu-border);
+  --headertext: var(--accent);
+
+
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--site-bg);
+  font-family: 'Bona Nova', serif !important;
+  min-height: 100vh;
+  padding-left: 90px; 
+}
+
+
+.press-pill:hover svg, 
+.networkscroll img:hover,
+p[style*="cursor: pointer"]:hover {
+  opacity: 1 !important;
+  transform: scale(1.1);
+}
+
+.networkscroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.networkscroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+
+settingsmenu-, 
+[class*="settingsmenu"] {
+  cursor: pointer;
+}
+
+settingsmenu- svg, 
+[class*="settingsmenu"] svg {
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s ease !important;
+}
+
+settingsmenu-:hover svg, 
+[class*="settingsmenu"]:hover svg {
+  transform: scale(1.3) rotate(45deg); 
+  opacity: 1 !important;
+}
+
+.column-icon {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), filter 0.2s ease !important;
+}
+
+.column-icon:hover {
+  transform: scale(1.2); /* Makes the column icon 20% larger */
+
+  
+
+  
+}
+
+  
+  
