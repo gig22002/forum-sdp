@@ -1,20 +1,84 @@
 """ Program to convert CSV to json """
 import sys
+import json
+import datetime
+import argparse
 import pandas as pd
+
+#TODO
+#reformat hierarchy for better nesting: DONE
+#align to Ryan's format
+#ingest more sources
+#translate from json to Sam's pug format
+
+def PopulateData(munData, addtlData, i):
+    """ Add addtlData as fields to munData """
+    for town in munData["Municipality or Borough"]:
+       print(town)
 
 def CSVToJSON(path, out="./out.json"):
     """ Convert CSV file to JSON preprocessing """
     #create pandas dataframe from csv
     df = pd.read_csv(path)
 
-    
+    #populate extra data
+    #df = PopulateData(df)
 
-    return out
+    #group by municipality/borough name and nest officials
+    outDF = (df.groupby(["Municipality or Borough","Jurisdiction Type"])
+               .apply(lambda x: x[["Name","Title","Phone","Email Address"]].to_dict("records"))
+               .reset_index()
+               .rename(columns={0:"Officials"}))
+    outDF["Timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") #append timestamp
+    #get text and convert to json
+    outTxt = outDF.to_json(orient="records")
+    #separate outjson and outdf for granularity
+    outJson = json.loads(outTxt)
+
+    #write to path
+    with open(out, "w") as f:
+        json.dump(outJson, f, indent=4)
+    
+    #return json object
+    return outJson, outDF
+
+def CreateArgs():
+    """ Create argument parser """
+    #create object
+    parser = argparse.ArgumentParser()
+
+    #input: csv output
+    parser.add_argument("input", help="Path to the json file to output to")
+
+    #api data and filenames
+    parser.add_argument("-f", "--file", action="store", help="Path to the text file of API endpoints to query")
+
+    return parser
 
 if __name__ == "__main__":
-    if (len(sys.argv) >= 2):
-        path = sys.argv[1]
-    else:
-        sys.exit("Error: must provide csv path")
+    #parse args
+    parser = CreateArgs()
+    args = parser.parse_args()
 
-    CSVToJSON(path)
+    #store args
+    path = args.input
+    endpointsPath = args.file
+
+    #create base file
+    _json, _df = CSVToJSON(path)
+
+    #process data
+    filenames = []
+    with open(endpointsPath, "r") as f:
+        for l in f:
+            filenames.append(l.strip().split(",")[0])
+    #process data for each file
+    index = 0
+    for x in filenames:
+        with open(x, "r") as f:
+            if (x.strip()[-4:].lower() == "json"): #if json
+                data = json.load(f)
+            else:
+                sys.exit("Error: require json file format from APIs")
+            PopulateData(_df, data, index)
+            index += 1
