@@ -11,8 +11,16 @@ import pandas as pd
 #ingest more sources
 #translate from json to Sam's pug format
 
-def PopulateData(munData, addtlData):
-    raise NotImplementedError
+def PopulateData(munData):
+    """ Wrapper to populate data from different set CSVs """
+    AddFinData(munData)
+
+def AddFinData(munData):
+    #get findata
+    with open("ctfiscaldata.json", "r") as f:
+        data = json.load(f)
+
+    print(data[0])
 
 def CSVToJSON(path, out="./out.json"):
     """ Convert CSV file to JSON preprocessing """
@@ -28,6 +36,12 @@ def CSVToJSON(path, out="./out.json"):
                .reset_index()
                .rename(columns={0:"Officials"}))
     outDF["Timestamp"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S") #append timestamp
+
+    #return dataframe
+    return outDF
+
+def DFToJSON(df):
+    """ Helper function to granularize csv to json process """
     #get text and convert to json
     outTxt = outDF.to_json(orient="records")
     #separate outjson and outdf for granularity
@@ -36,9 +50,10 @@ def CSVToJSON(path, out="./out.json"):
     #write to path
     with open(out, "w") as f:
         json.dump(outJson, f, indent=4)
-    
-    #return json object
+
+    #return json obj
     return outJson
+    
 
 def CreateArgs():
     """ Create argument parser """
@@ -63,18 +78,23 @@ if __name__ == "__main__":
     endpointsPath = args.file
 
     #create base file
-    _json = CSVToJSON(path)
+    _json, _df = CSVToJSON(path)
 
     #process data
-    filenames = []
-    with open(endpointsPath, "r") as f:
-        for l in f:
-            filenames.append(l.strip().split(",")[0])
+    PopulateData(_df)
+
+    #process data
+    #filenames = []
+    #with open(endpointsPath, "r") as f:
+    #    for l in f:
+    #        filenames.append(l.strip().split(",")[0])
     #process data for each file
-    for x in filenames:
-        with open(x, "r") as f:
-            if (x.strip()[-4:].lower() == "json"): #if json
-                data = json.load(f)
-            else:
-                sys.exit("Error: require json file format from APIs")
-            PopulateData(json, data)
+    #index = 0
+    #for x in filenames:
+    #    with open(x, "r") as f:
+    #        if (x.strip()[-4:].lower() == "json"): #if json
+    #            data = json.load(f)
+    #        else:
+    #            sys.exit("Error: require json file format from APIs")
+    #        PopulateData(_df, data, index)
+    #        index += 1
