@@ -20,10 +20,11 @@ def AddFinData(munData):
     with open("ctfiscaldata.json", "r") as f:
         data = json.load(f)
 
-    print(data[0])
+    for item in data:
+        print(item["town_name"])
 
-def CSVToJSON(path, out="./out.json"):
-    """ Convert CSV file to JSON preprocessing """
+def CSVToDF(path, out="./out.json"):
+    """ Convert CSV file to dataframe for JSON preprocessing """
     #create pandas dataframe from csv
     df = pd.read_csv(path)
 
@@ -78,7 +79,7 @@ if __name__ == "__main__":
     endpointsPath = args.file
 
     #create base file
-    _json, _df = CSVToJSON(path)
+    _df = CSVToDF(path)
 
     #process data
     PopulateData(_df)
